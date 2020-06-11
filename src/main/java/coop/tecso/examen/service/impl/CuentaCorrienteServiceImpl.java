@@ -94,7 +94,7 @@ public class CuentaCorrienteServiceImpl extends AbstractService<CuentaCorriente,
 	}
 
 	@Override
-	public CuentaCorrienteDto getOne(Long id) throws Exception {
+	public CuentaCorrienteDto getOne(Long id) throws BusinessException {
 		CuentaCorrienteDto ccDto = super.getOne(id);
 
 		// Ordenamiento de movimientos por fecha decreciente

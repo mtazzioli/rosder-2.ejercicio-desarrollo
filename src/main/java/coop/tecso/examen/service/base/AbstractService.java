@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 
 import coop.tecso.examen.dto.base.BaseDto;
+import coop.tecso.examen.exception.BusinessException;
 import coop.tecso.examen.model.AbstractPersistentObject;
 import coop.tecso.examen.repository.base.BaseCrudRepository;
 
@@ -31,12 +32,12 @@ public abstract class AbstractService<T extends AbstractPersistentObject, U exte
 
 	public abstract BaseCrudRepository<T> getRepository();
 
-	public U getOne(Long id) throws Exception {
+	public U getOne(Long id) throws BusinessException {
 		Optional<T> entity = this.getRepository().findById(id);
 		if (entity.isPresent()) {
 			return toDto(entity.get());
 		}
-		return null;
+		throw new BusinessException("No existe el objeto con id: " + id);
 	}
 
 	public T save(U dto) throws Exception {

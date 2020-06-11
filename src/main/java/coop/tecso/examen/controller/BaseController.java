@@ -1,5 +1,6 @@
 package coop.tecso.examen.controller;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,9 +46,11 @@ public abstract class BaseController<E extends AbstractPersistentObject, D exten
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Object> save(@RequestBody D dto) {
+	public ResponseEntity<Object> save(@RequestBody D dto) throws BusinessException {
 		try {
 			return new ResponseEntity<>(getService().toDto(getService().save(dto)), HttpStatus.OK);
+		} catch (DataIntegrityViolationException be) {
+			throw new BusinessException("Existe un objeto con la clave ingresada");
 		} catch (BusinessException be) {
 			return returnResponseBusinessException(be);
 		} catch (Exception e) {

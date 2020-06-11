@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import coop.tecso.examen.dto.PersonaFisicaDto;
+import coop.tecso.examen.exception.BusinessException;
 import coop.tecso.examen.model.PersonaFisica;
 import coop.tecso.examen.service.PersonaFisicaService;
 import coop.tecso.examen.service.base.IAbstractService;
@@ -27,6 +28,10 @@ public class PersonaFisicaController extends BaseController<PersonaFisica, Perso
 
 	@Override
 	public ResponseEntity<Object> save(@Validated(PersonaFisicaI.class) @RequestBody PersonaFisicaDto dto) {
-		return super.save(dto);
+		try {
+			return super.save(dto);
+		} catch (BusinessException be) {
+			return returnResponseBusinessException(be);
+		}
 	}
 }
