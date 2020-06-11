@@ -1,7 +1,7 @@
 package coop.tecso.examen.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.Instant;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,10 +26,9 @@ public class Movimiento extends AbstractPersistentObject {
 	@JoinColumn(name = "cuentaCorriente_id", nullable = false)
 	private CuentaCorriente cuentaCorriente;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
-	private Date fecha;
-	
+	private Instant fecha;
+
 	@Length(max = 200)
 	private String descripción;
 
@@ -49,11 +48,11 @@ public class Movimiento extends AbstractPersistentObject {
 		this.cuentaCorriente = cuentaCorriente;
 	}
 
-	public Date getFecha() {
+	public Instant getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(Date fecha) {
+	public void setFecha(Instant fecha) {
 		this.fecha = fecha;
 	}
 

@@ -1,15 +1,18 @@
 package coop.tecso.examen.dto;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.Instant;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import coop.tecso.examen.dto.base.BaseDto;
 import coop.tecso.examen.enumeration.TipoMovimiento;
+import coop.tecso.examen.validation.New;
 
 public class MovimientoDto extends BaseDto {
 
@@ -18,10 +21,12 @@ public class MovimientoDto extends BaseDto {
 	@JsonBackReference
 	private CuentaCorrienteDto cuentaCorriente;
 
-	private Date fecha;
+	private Instant fecha;
 
+	@Size(groups = { New.class }, max = 200, message = "La descripción no puede contener más de 200 caracteres ")
 	private String descripción;
 
+	@Min(groups = { New.class }, value = 0)
 	private BigDecimal importe;
 
 	// ENUMS
@@ -36,11 +41,11 @@ public class MovimientoDto extends BaseDto {
 		this.cuentaCorriente = cuentaCorriente;
 	}
 
-	public Date getFecha() {
+	public Instant getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(Date fecha) {
+	public void setFecha(Instant fecha) {
 		this.fecha = fecha;
 	}
 

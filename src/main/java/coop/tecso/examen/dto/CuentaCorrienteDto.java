@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
 
 import coop.tecso.examen.dto.base.BaseDto;
 import coop.tecso.examen.enumeration.TipoMoneda;
@@ -15,6 +16,7 @@ public class CuentaCorrienteDto extends BaseDto {
 
 	private List<MovimientoDto> movimientos;
 
+	@NotNull(message = "El número de cuenta no puede ser nulo")
 	private Integer numeroCuenta;
 
 	private BigDecimal saldo;
