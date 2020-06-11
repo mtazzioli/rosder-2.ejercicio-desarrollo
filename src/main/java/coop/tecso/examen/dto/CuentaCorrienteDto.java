@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import coop.tecso.examen.dto.base.BaseDto;
 import coop.tecso.examen.enumeration.TipoMoneda;
+import coop.tecso.examen.validation.New;
 
 public class CuentaCorrienteDto extends BaseDto {
 
@@ -16,13 +17,14 @@ public class CuentaCorrienteDto extends BaseDto {
 
 	private List<MovimientoDto> movimientos;
 
-	@NotNull(message = "El número de cuenta no puede ser nulo")
+	@NotNull(groups = { New.class }, message = "El número de cuenta no puede ser nulo")
 	private Integer numeroCuenta;
 
 	private BigDecimal saldo;
 
 	// ENUMS
 	@Enumerated(EnumType.STRING)
+	@NotNull(groups = { New.class }, message = "El tipo de moneda no puede ser nulo")
 	private TipoMoneda tipoMoneda;
 
 	public List<MovimientoDto> getMovimientos() {

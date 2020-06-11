@@ -7,7 +7,7 @@ import coop.tecso.examen.model.AbstractPersistentObject;
 
 public interface IAbstractService<D extends BaseDto, E extends AbstractPersistentObject> {
 
-	public E save(D dto);
+	public E save(D dto) throws Exception;
 
 	public D toDto(E entity);
 

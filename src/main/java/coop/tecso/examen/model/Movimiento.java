@@ -9,8 +9,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
@@ -30,7 +28,7 @@ public class Movimiento extends AbstractPersistentObject {
 	private Instant fecha;
 
 	@Length(max = 200)
-	private String descripción;
+	private String descripcion;
 
 	@Column(nullable = false, scale = 2)
 	private BigDecimal importe;
@@ -56,12 +54,12 @@ public class Movimiento extends AbstractPersistentObject {
 		this.fecha = fecha;
 	}
 
-	public String getDescripción() {
-		return descripción;
+	public String getDescripcion() {
+		return descripcion;
 	}
 
-	public void setDescripción(String descripción) {
-		this.descripción = descripción;
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 	public BigDecimal getImporte() {

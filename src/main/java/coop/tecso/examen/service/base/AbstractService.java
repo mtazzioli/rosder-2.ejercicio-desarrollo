@@ -39,7 +39,7 @@ public abstract class AbstractService<T extends AbstractPersistentObject, U exte
 		return null;
 	}
 
-	public T save(U dto) {
+	public T save(U dto) throws Exception {
 		T entity = this.fromDto(dto);
 		return this.getRepository().save(entity);
 	}

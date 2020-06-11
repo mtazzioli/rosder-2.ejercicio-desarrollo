@@ -1,6 +1,8 @@
 package coop.tecso.examen.service.impl;
 
 import java.math.BigDecimal;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,24 +40,42 @@ public class CuentaCorrienteServiceImpl extends AbstractService<CuentaCorriente,
 
 	@Override
 	public void delete(Long id) throws Exception {
-		CuentaCorriente cc = repository.getOne(id);
-		if (cc.getMovimientos() == null || cc.getMovimientos().isEmpty())
+		Optional<CuentaCorriente> ccO = repository.findById(id);
+
+		if (!ccO.isPresent())
+			throw new BusinessException("Error, No se encuentra la cuenta corriente a eliminar");
+
+		if (ccO.get().getMovimientos() == null || ccO.get().getMovimientos().isEmpty())
 			super.delete(id);
 		else
-			throw new Exception("No pueden eliminarse cuentas con movimientos asociados");
+			throw new BusinessException("No pueden eliminarse cuentas con movimientos asociados");
 	}
 
 	@Override
-	public CuentaCorriente save(CuentaCorrienteDto dto) {
+	public CuentaCorriente save(CuentaCorrienteDto dto) throws Exception {
+		// Alta
 		if (dto.getId() == null) {
 			dto.setSaldo(BigDecimal.ZERO);
+			try {
+				return repository.save(fromDto(dto));
+			} catch (Exception e) {
+				throw new BusinessException(
+						"Error, ya existe una cuenta con el numero de cuenta " + dto.getNumeroCuenta());
+			}
+
 		}
-		return super.save(dto);
+
+		throw new BusinessException("Error, No se admite la modificación de cuentas");
 	}
 
 	@Override
 	public CuentaCorriente actualizarSaldo(Movimiento m) throws BusinessException {
-		CuentaCorriente cc = repository.getOne(m.getCuentaCorriente().getId());
+		Optional<CuentaCorriente> ccO = repository.findById(m.getCuentaCorriente().getId());
+
+		if (!ccO.isPresent())
+			throw new BusinessException("Error, No se encuentra la cuenta corriente para imputar el movimiento");
+
+		CuentaCorriente cc = ccO.get();
 
 		BigDecimal nuevoSaldo;
 		if (m.getTipoMovimiento().getAumentaSaldo()) {
@@ -64,14 +84,21 @@ public class CuentaCorrienteServiceImpl extends AbstractService<CuentaCorriente,
 			nuevoSaldo = cc.getSaldo().subtract(m.getImporte());
 		}
 
-		if (new BigDecimal(cc.getTipoMoneda().getDescubiertoPermitido()).compareTo(nuevoSaldo) < -1) {
-			throw new BusinessException("Movimiento rechazado, el descubierto para un cuenta en :" + cc.getTipoMoneda()
+		if (cc.getTipoMoneda().getDescubiertoPermitido().compareTo(nuevoSaldo) > 0) {
+			throw new BusinessException("Movimiento rechazado, el descubierto para un cuenta en " + cc.getTipoMoneda()
 					+ " no puede ser mayor a " + cc.getTipoMoneda().getDescubiertoPermitido());
 		}
 
 		cc.setSaldo(nuevoSaldo);
-		repository.save(cc);
-		return null;
+		return repository.save(cc);
+	}
+
+	@Override
+	public CuentaCorrienteDto getOne(Long id) throws Exception {
+		CuentaCorrienteDto ccDto = super.getOne(id);
+		ccDto.getMovimientos().stream().sorted((o1, o2) -> o1.getFecha().compareTo(o2.getFecha()))
+				.collect(Collectors.toList());
+		return ccDto;
 	}
 
 }

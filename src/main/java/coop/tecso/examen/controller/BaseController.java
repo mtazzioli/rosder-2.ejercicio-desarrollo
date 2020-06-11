@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import coop.tecso.examen.dto.ErrorDto;
 import coop.tecso.examen.dto.base.BaseDto;
+import coop.tecso.examen.exception.BusinessException;
 import coop.tecso.examen.model.AbstractPersistentObject;
 import coop.tecso.examen.service.base.IAbstractService;
 
@@ -23,6 +25,8 @@ public abstract class BaseController<E extends AbstractPersistentObject, D exten
 	public ResponseEntity<Object> findAll() {
 		try {
 			return new ResponseEntity<>(getService().getAll(), HttpStatus.OK);
+		} catch (BusinessException be) {
+			return returnResponseBusinessException(be);
 		} catch (Exception e) {
 			System.out.println(e);
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -33,6 +37,8 @@ public abstract class BaseController<E extends AbstractPersistentObject, D exten
 	public ResponseEntity<Object> getOne(@PathVariable(value = "id") Long id) {
 		try {
 			return new ResponseEntity<>(getService().getOne(id), HttpStatus.OK);
+		} catch (BusinessException be) {
+			return returnResponseBusinessException(be);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -42,6 +48,8 @@ public abstract class BaseController<E extends AbstractPersistentObject, D exten
 	public ResponseEntity<Object> save(@RequestBody D dto) {
 		try {
 			return new ResponseEntity<>(getService().toDto(getService().save(dto)), HttpStatus.OK);
+		} catch (BusinessException be) {
+			return returnResponseBusinessException(be);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -53,6 +61,8 @@ public abstract class BaseController<E extends AbstractPersistentObject, D exten
 		try {
 			getService().delete(id);
 			return new ResponseEntity<>(null, HttpStatus.OK);
+		} catch (BusinessException be) {
+			return returnResponseBusinessException(be);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -61,5 +71,13 @@ public abstract class BaseController<E extends AbstractPersistentObject, D exten
 
 	public ObjectMapper getObjectMapper() {
 		return mapper;
+	}
+
+	public ResponseEntity<Object> returnResponseBusinessException(BusinessException be) {
+		ErrorDto eDto = new ErrorDto(be.getMessage());
+		if (be.getErrorMsjs() != null) {
+			eDto.setDescription(be.getErrorMsjs());
+		}
+		return new ResponseEntity<>(eDto, HttpStatus.NOT_ACCEPTABLE);
 	}
 }

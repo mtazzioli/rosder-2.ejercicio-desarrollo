@@ -18,15 +18,15 @@ public class MovimientoDto extends BaseDto {
 
 	private static final long serialVersionUID = 10328694530610928L;
 
-	@JsonBackReference
+    @JsonBackReference
 	private CuentaCorrienteDto cuentaCorriente;
 
 	private Instant fecha;
 
-	@Size(groups = { New.class }, max = 200, message = "La descripción no puede contener más de 200 caracteres ")
-	private String descripción;
+	@Size(groups = { New.class }, max = 200, message = "La descripcion no puede contener más de 200 caracteres ")
+	private String descripcion;
 
-	@Min(groups = { New.class }, value = 0)
+	@Min(groups = { New.class }, value = 0, message = "El importe de los movimientos tiene que ser mayor a 0")
 	private BigDecimal importe;
 
 	// ENUMS
@@ -49,12 +49,12 @@ public class MovimientoDto extends BaseDto {
 		this.fecha = fecha;
 	}
 
-	public String getDescripción() {
-		return descripción;
+	public String getDescripcion() {
+		return descripcion;
 	}
 
-	public void setDescripción(String descripción) {
-		this.descripción = descripción;
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 	public BigDecimal getImporte() {
