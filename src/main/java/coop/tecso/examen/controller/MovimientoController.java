@@ -14,7 +14,6 @@ import coop.tecso.examen.model.Movimiento;
 import coop.tecso.examen.service.MovimientoService;
 import coop.tecso.examen.service.base.IAbstractService;
 import coop.tecso.examen.validation.New;
-import coop.tecso.examen.validation.PersonaJuridicaI;
 
 @RestController
 @RequestMapping("/movimiento")
