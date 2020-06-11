@@ -10,5 +10,4 @@ import coop.tecso.examen.model.AbstractPersistentObject;
 public interface BaseCrudRepository<E extends AbstractPersistentObject>
 		extends JpaRepository<E, Long>, JpaSpecificationExecutor<E> {
 
-	E findFirstById(Long id);
 }

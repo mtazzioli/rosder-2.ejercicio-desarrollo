@@ -2,6 +2,7 @@ package coop.tecso.examen.service.base;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -31,13 +32,11 @@ public abstract class AbstractService<T extends AbstractPersistentObject, U exte
 	public abstract BaseCrudRepository<T> getRepository();
 
 	public U getOne(Long id) throws Exception {
-		try {
-			T entity = this.getRepository().findFirstById(id);
-			return toDto(entity);
-		} catch (Exception e) {
-			throw new Exception("Error en el getOne, no es posible obtener objeto en " + this.getRepository().getClass()
-					+ " con id: " + id + " o error en el toDto");
+		Optional<T> entity = this.getRepository().findById(id);
+		if (entity.isPresent()) {
+			return toDto(entity.get());
 		}
+		return null;
 	}
 
 	public T save(U dto) {
@@ -45,9 +44,13 @@ public abstract class AbstractService<T extends AbstractPersistentObject, U exte
 		return this.getRepository().save(entity);
 	}
 
-	public T delete(U dto) {
-		T entity = this.fromDto(dto);
-		return this.getRepository().save(entity);
+	public void delete(Long id) throws Exception {
+		Optional<T> entity = getRepository().findById(id);
+		if (entity.isPresent()) {
+			this.getRepository().delete(entity.get());
+		} else {
+			throw new Exception("No se puede eliminar un objeto inexistente.");
+		}
 	}
 
 	public ModelMapper getModelMapper() {

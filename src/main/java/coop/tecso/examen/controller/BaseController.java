@@ -29,6 +29,7 @@ public abstract class BaseController<E extends AbstractPersistentObject, D exten
 		}
 	}
 
+	@RequestMapping(value = "/{id:[\\d]+}", method = RequestMethod.GET)
 	public ResponseEntity<Object> getOne(@PathVariable(value = "id") Long id) {
 		try {
 			return new ResponseEntity<>(getService().getOne(id), HttpStatus.OK);
@@ -49,10 +50,9 @@ public abstract class BaseController<E extends AbstractPersistentObject, D exten
 
 	@RequestMapping(value = "/{id:[\\d]+}", method = RequestMethod.DELETE)
 	public ResponseEntity<Object> delete(@PathVariable(value = "id") Long id) {
-		D dto = null;
 		try {
-			dto = this.getService().getOne(id);
-			return new ResponseEntity<>(getService().toDto(getService().delete(dto)), HttpStatus.OK);
+			getService().delete(id);
+			return new ResponseEntity<>(null, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

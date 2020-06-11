@@ -12,11 +12,11 @@ public interface IAbstractService<D extends BaseDto, E extends AbstractPersisten
 	public D toDto(E entity);
 
 	public E fromDto(D dto);
-	
+
 	public D getOne(Long id) throws Exception;
-	
+
 	public List<D> getAll() throws Exception;
 
-	public E delete(D dto);
-	
+	public void delete(Long id) throws Exception;
+
 }

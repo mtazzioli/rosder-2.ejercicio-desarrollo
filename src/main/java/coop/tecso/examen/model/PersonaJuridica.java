@@ -1,7 +1,5 @@
 package coop.tecso.examen.model;
 
-import java.time.Year;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
@@ -14,7 +12,7 @@ public class PersonaJuridica extends Titular {
 	private String razonSocial;
 
 	@Column
-	private Year anoFundacion;
+	private String anoFundacion;
 
 	public String getRazonSocial() {
 		return razonSocial;
@@ -24,11 +22,11 @@ public class PersonaJuridica extends Titular {
 		this.razonSocial = razonSocial;
 	}
 
-	public Year getAnoFundacion() {
+	public String getAnoFundacion() {
 		return anoFundacion;
 	}
 
-	public void setAnoFundacion(Year anoFundacion) {
+	public void setAnoFundacion(String anoFundacion) {
 		this.anoFundacion = anoFundacion;
 	}
 
