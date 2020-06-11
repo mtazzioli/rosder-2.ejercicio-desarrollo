@@ -34,10 +34,10 @@
 	--header 'Content-Type: application/json' \
 	--data-raw '{
 	    "id": 2,
-	    "rut": "2",
-	    "nombre": "Marcelo Hernán",
-	    "apellido": "Tazzioli APE",
-	    "cc": "ASDFT"
+	    "rut": "2 Edución",
+	    "nombre": "Marcelo Hernán Edución",
+	    "apellido": "Tazzioli Edución",
+	    "cc": "ASDFT Edución"
 	}'
 	
 	Delete:

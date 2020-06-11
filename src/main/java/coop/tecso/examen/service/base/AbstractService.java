@@ -50,7 +50,7 @@ public abstract class AbstractService<T extends AbstractPersistentObject, U exte
 		if (entity.isPresent()) {
 			this.getRepository().delete(entity.get());
 		} else {
-			throw new Exception("No se puede eliminar un objeto inexistente.");
+			throw new BusinessException("Imposible eliminar objeto inexistente, id del objeto: " + id);
 		}
 	}
 
