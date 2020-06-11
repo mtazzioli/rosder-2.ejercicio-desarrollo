@@ -96,8 +96,11 @@ public class CuentaCorrienteServiceImpl extends AbstractService<CuentaCorriente,
 	@Override
 	public CuentaCorrienteDto getOne(Long id) throws Exception {
 		CuentaCorrienteDto ccDto = super.getOne(id);
-		ccDto.getMovimientos().stream().sorted((o1, o2) -> o1.getFecha().compareTo(o2.getFecha()))
-				.collect(Collectors.toList());
+
+		// Ordenamiento de movimientos por fecha decreciente
+		ccDto.setMovimientos(ccDto.getMovimientos().stream().sorted((o1, o2) -> o2.getFecha().compareTo(o1.getFecha()))
+				.collect(Collectors.toList()));
+
 		return ccDto;
 	}
 
